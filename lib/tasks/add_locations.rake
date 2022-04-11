@@ -4,7 +4,7 @@ namespace :add_locations do
   next if Location.find_by(location_code: "BAL").present?
   locations = [
     Location.new(placename_en: 'Gilgit', location_code: 'GIL', admin_level: 1, type: 'province', hierarchy_path: 'GIL'),
-  
+
     Location.new(placename_en: 'Gilgit', location_code: 'GIL01', admin_level: 2, type: 'district', hierarchy_path: 'GIL.GIL01'),
     Location.new(placename_en: 'Gilgit', location_code: 'GIL0101', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL01.GIL0101'),
     Location.new(placename_en: 'Ghizer (at Gakuch)', location_code: 'GIL02', admin_level: 2, type: 'district', hierarchy_path: 'GIL.GIL02'),
