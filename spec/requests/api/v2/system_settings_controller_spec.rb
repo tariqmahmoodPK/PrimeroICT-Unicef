@@ -63,7 +63,7 @@ describe Api::V2::SystemSettingsController, type: :request do
       welcome_email_text: 'Welcome to Primero',
       approvals_labels_en: {
         assessment: 'Assessment',
-        case_plan: 'Case Plan',
+        case_plan: 'Child Care Plan',
         closure: 'Closure'
       }
     )

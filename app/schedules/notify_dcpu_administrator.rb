@@ -5,7 +5,7 @@ class NotifyDcpuAdministrator < PeriodicJob
   def perform_rescheduled
     self.notify
   rescue StandardError => e
-    Rails.logger.error("Error in the notifying to the DCPU Admin\n#{e.backtrace}")
+    Rails.logger.error("Error in the notifying to the CPI In-charge\n#{e.backtrace}")
   end
 
   def self.reschedule_after
@@ -18,7 +18,7 @@ class NotifyDcpuAdministrator < PeriodicJob
         next unless approval['approval_requested_for'] && approval['approval_status'] == "requested"
 
         admins = User.dcpu_admin_with_mail_enabled
-        next Rails.logger.info "Closure Approval Request Mail not sent. No DCPU Admin present with send_mail enabled. Case [#{child.id}]" if admins.blank?
+        next Rails.logger.info "Closure Approval Request Mail not sent. No CPI In-charge present with send_mail enabled. Case [#{child.id}]" if admins.blank?
 
         admins.each { |admin| NotifyDcpuAdministratorMailer.notify_about_pending_approvals(admin, child).deliver_later }
       end
