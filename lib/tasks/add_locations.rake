@@ -4,7 +4,7 @@ namespace :add_locations do
   next if Location.find_by(location_code: "BAL").present?
   locations = [
     Location.new(placename_en: 'Gilgit', location_code: 'GIL', admin_level: 1, type: 'province', hierarchy_path: 'GIL'),
-     
+  
     Location.new(placename_en: 'Gilgit', location_code: 'GIL01', admin_level: 2, type: 'district', hierarchy_path: 'GIL.GIL01'),
     Location.new(placename_en: 'Gilgit', location_code: 'GIL0101', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL01.GIL0101'),
     Location.new(placename_en: 'Ghizer (at Gakuch)', location_code: 'GIL02', admin_level: 2, type: 'district', hierarchy_path: 'GIL.GIL02'),
@@ -19,8 +19,8 @@ namespace :add_locations do
     Location.new(placename_en: 'Gojal', location_code: 'GIL0302', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL03.GIL0302'),
 
     Location.new(placename_en: 'Nagar', location_code: 'GIL04', admin_level: 2, type: 'district', hierarchy_path: 'GIL.GIL04'),
-    Location.new(placename_en: 'Nagar I', location_code: 'GIL0401', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL04.GIL0401'),
-    Location.new(placename_en: 'Nagar II', location_code: 'GIL0402', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL04.GIL0402'),
+    Location.new(placename_en: 'Nagar-I', location_code: 'GIL0401', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL04.GIL0401'),
+    Location.new(placename_en: 'Nagar-II', location_code: 'GIL0402', admin_level: 3, type: 'tehsil', hierarchy_path: 'GIL.GIL04.GIL0402'),
 
     Location.new(placename_en: 'Baltistan', location_code: 'BAL', admin_level: 1, type: 'province', hierarchy_path: 'BAL'),
 
