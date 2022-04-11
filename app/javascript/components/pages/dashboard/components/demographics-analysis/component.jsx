@@ -30,7 +30,7 @@ const Component = () => {
   return (
     stats && (
       <div>
-        {(role === "CP Manager" || role === "CPO" || role === "DCPU Admin" || role === "FTR Manager") && (
+        {(role === "CP Manager" || role === "CPO" || role === "CPI In-charge" || role === "FTR Manager") && (
           <div className={css.container}>
             <Grid item md={6} xl={6}>
               <div className={`${css.box} ${css.mr}`}>

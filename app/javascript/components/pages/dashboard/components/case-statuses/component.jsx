@@ -69,7 +69,7 @@ const Component = () => {
               </div>
             </div>
           )}
-          {role === "DCPU Admin" && (
+          {role === "CPI In-charge" && (
             <div className={css.container}>
               <div className={css.card} style={{ backgroundColor: "rgb(255, 99, 132)" }} flat>
                 <div className={css.perc}>{st.registered}</div>

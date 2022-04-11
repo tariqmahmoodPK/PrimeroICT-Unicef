@@ -61,7 +61,7 @@ class User < ApplicationRecord
   scope :by_agency, (lambda do |id|
     joins(:agency).where(agencies: { id: id })
   end)
-  scope :dcpu_admin_with_mail_enabled, -> { includes(:role).where(send_mail: true).where(role: { name: "DCPU Admin" }) }
+  scope :dcpu_admin_with_mail_enabled, -> { includes(:role).where(send_mail: true).where(role: { name: "CPI In-charge" }) }
 
   alias_attribute :organization, :agency
   alias_attribute :name, :user_name

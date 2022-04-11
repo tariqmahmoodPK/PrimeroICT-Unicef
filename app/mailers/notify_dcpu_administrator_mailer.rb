@@ -7,7 +7,7 @@ class NotifyDcpuAdministratorMailer < ActionMailer::Base
 
     if @user.present?
       mail(to: @user.email,
-           subject: "Reminder: Notify DCPU Administrator on pending closure approval requests")
+           subject: "Reminder: Notify CPI In-charge on pending closure approval requests")
     else
       Rails.logger.error "Mail not sent - Case [#{@child.name}] not found"
     end

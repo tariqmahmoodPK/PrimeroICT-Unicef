@@ -85,11 +85,11 @@ case_plan_fields = [
               }),
     Field.new({"name" => "case_plan_section_header",
                 "type" => "separator",
-                "display_name_en" => "Case Plan"
+                "display_name_en" => "Child Care Plan"
               }),
     Field.new({"name" => "date_case_plan",
               "type" => "date_field",
-              "display_name_en" => "Date Case Plan Initiated",
+              "display_name_en" => "Date Child Care Plan Initiated",
               "editable" => true,
               "disabled" => false,
               "help_text_en" => "This field is used for the Workflow status"
@@ -125,6 +125,6 @@ FormSection.create_or_update!({
   :form_group_id => "case_plan",
   "editable" => true,
   :fields => case_plan_fields,
-  "name_en" => "Case Plan",
-  "description_en" => "Case Plan"
+  "name_en" => "Child Care Plan",
+  "description_en" => "Child Care Plan"
 })

@@ -43,7 +43,7 @@ assessment_fields = [
   }),
   Field.new({
     type: 'date_field',
-    display_name_en: 'Date Case Plan Due',
+    display_name_en: 'Date Child Care Plan Due',
     name: 'case_plan_due_date',
     required: false,
     editable: false

@@ -54,7 +54,7 @@ namespace :add_new_users do
       email: 'Fat@gmail.com',
       disabled: 'false',
       agency_id: Agency.find_by(agency_code: 'A12').id,
-      role_id: Role.find_by_name('DCPU Admin').id,
+      role_id: Role.find_by_name('CPI In-charge').id,
       user_groups: user_group,
       locale: Primero::Application::LOCALE_ENGLISH,
       location: location

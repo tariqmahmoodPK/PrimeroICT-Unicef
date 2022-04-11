@@ -7,7 +7,7 @@ conference_details_subform_fields = [
              "type" => "select_box",
              "display_name_en" => "Type of meeting",
              "option_strings_text_en" => [
-               { id: 'case_plan_review', display_text: "Case Plan Review" },
+               { id: 'case_plan_review', display_text: "Child Care Plan Review" },
                { id: 'case_conference', display_text: "Case Conference" },
                { id: 'other', display_text: "Other" }
              ].map(&:with_indifferent_access)

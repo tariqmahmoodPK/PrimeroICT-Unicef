@@ -77,7 +77,7 @@ describe Approval do
         @approval.perform!(Approval::APPROVAL_STATUS_REQUESTED)
       end
 
-      it 'should return the correct form for case plan type' do
+      it 'should return the correct form for child care plan type' do
         expect(Alert.last.form_sidebar_id).to eq('cp_case_plan')
       end
 
@@ -131,7 +131,7 @@ describe Approval do
         @approval.perform!(Approval::APPROVAL_STATUS_REQUESTED)
       end
 
-      it 'should return the correct form for case plan type' do
+      it 'should return the correct form for child care plan type' do
         expect(Alert.last.form_sidebar_id).to eq('action_plan_form')
       end
 
@@ -169,7 +169,7 @@ describe Approval do
         @approval.perform!(Approval::APPROVAL_STATUS_REQUESTED)
       end
 
-      it 'should return the correct form for case plan type' do
+      it 'should return the correct form for child care plan type' do
         expect(Alert.last.form_sidebar_id).to eq('action_plan_form')
       end
 

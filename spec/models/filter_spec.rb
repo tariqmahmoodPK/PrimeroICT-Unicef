@@ -215,7 +215,7 @@ describe Filter do
         filter_by_date_cp = [
           { id: 'registration_date', display_name: 'Date of Registration' },
           { id: 'assessment_requested_on', display_name: 'Date of Assessment' },
-          { id: 'date_case_plan', display_name: 'Date of Case Plan' },
+          { id: 'date_case_plan', display_name: 'Date of Child Care Plan' },
           { id: 'date_closure', display_name: 'Date of Case Closure ' },
           { id: 'created_at', display_name: 'Case Open Date' }
         ]

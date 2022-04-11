@@ -26,14 +26,14 @@ describe Task do
       expect(tasks).to be_empty
     end
 
-    it "creates Case Plan task" do
+    it "creates Child Care Plan task" do
       child = create(:child, case_plan_due_date: Date.tomorrow)
       task = Task.from_case(child).first
 
       expect(task.type).to eq('case_plan')
     end
 
-    it "doesn't create an Case Plan task if already started" do
+    it "doesn't create an Child Care Plan task if already started" do
       child = build(:child, case_plan_due_date: Date.tomorrow, date_case_plan: Date.today)
       child.stub(:calculate_workflow).and_return({})
       child.save!

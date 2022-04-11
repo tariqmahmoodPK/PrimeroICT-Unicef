@@ -620,7 +620,7 @@ Lookup.create_or_update!(
     :name_en => "Approval Type",
     :locked => true,
     :lookup_values => [
-        {id: "case_plan", display_text: "Case Plan"},
+        {id: "case_plan", display_text: "Child Care Plan"},
         {id: "action_plan", display_text: "Action Plan"},
         {id: "service_provision", display_text: "Service Provision"}
     ].map(&:with_indifferent_access)
@@ -631,7 +631,7 @@ Lookup.create_or_update!(
     :name_en => "Approval Type for GBV users",
     :locked => true,
     :lookup_values => [
-        {id: "case_plan", display_text: "Case Plan"},
+        {id: "case_plan", display_text: "Child Care Plan"},
         {id: "closure", display_text: "Closure"}
     ].map(&:with_indifferent_access)
 )
@@ -688,7 +688,7 @@ Lookup.create_or_update!(
         {id: "reopened", display_text: "Case reopened"}.with_indifferent_access,
         {id: "service_provision", display_text: "Service provision"}.with_indifferent_access,
         {id: "services_implemented", display_text: "All response services implemented"}.with_indifferent_access,
-        {id: "case_plan", display_text: "Case Plan"}.with_indifferent_access
+        {id: "case_plan", display_text: "Child Care Plan"}.with_indifferent_access
     ]
 )
 
@@ -885,7 +885,7 @@ Lookup.create_or_update!(
     { id: 'data_confidentiality', display_text: "Data Confidentiality" },
     { id: 'assessment', display_text: "Assessment" },
     { id: 'family_partner_details', display_text: "Family / Partner Details" },
-    { id: 'case_plan', display_text: "Case Plan" },
+    { id: 'case_plan', display_text: "Child Care Plan" },
     { id: 'services_follow_up', display_text: "Services / Follow Up" },
     { id: 'closure', display_text: "Closure" },
     { id: 'tracing', display_text: "Tracing" },

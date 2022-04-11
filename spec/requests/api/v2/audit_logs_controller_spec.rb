@@ -9,7 +9,7 @@ describe Api::V2::AuditLogsController, type: :request do
       default_locale: 'en',
       approvals_labels_en: {
         assessment: 'Assessment',
-        case_plan: 'Case Plan',
+        case_plan: 'Child Care Plan',
         closure: 'Closure'
       }
     )
