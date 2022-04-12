@@ -30,7 +30,7 @@ const Component = () => {
       xAxes: [{
         scaleLabel: {
           display: true,
-          labelString: "Department",
+          labelString: "Agency",
           fontColor: "red"
         }
       }],
@@ -72,7 +72,7 @@ const Component = () => {
       {graphData && (
         <Grid item xl={6} md={6} xs={12}>
           <div className={css.container}>
-            <h2>Case Referrals (by Department)</h2>
+            <h2>Case Referrals (by Agency)</h2>
             <div className={css.card} flat>
               <BarChart options={chart_options} data={graphData} showDetails showLegend={false} />
             </div>
