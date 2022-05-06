@@ -116,7 +116,7 @@ const Dashboard = () => {
         <Grid item xl={6} md={6} xs={12} style={{ textAlign: 'right' }}>
           <a
             style={{ fontSize: 20, fontWeight: 600, textAlign: 'right' }}
-            href="/GB-Resources.zip"
+            href="/ICT-Resources.zip"
             download
           // target="_blank"
           >
