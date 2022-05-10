@@ -101,7 +101,7 @@ const Nav = () => {
           <img src={GBLogo} height="80px" width="100px" alt="Logo" />
           <p className={css.head}>Child Protection</p>
           <p className={css.head}>Information Management System</p>
-          <p className={css.head}>Government of Gilgit-Baltistan</p>
+          <p className={css.head}>Ministry of Human Rights</p>
         </div>
       </Hidden>
       <div className={css.drawerHeaderContainer}>
