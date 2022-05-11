@@ -5,7 +5,7 @@ import clsx from "clsx";
 
 import ModuleLogo from "../../../module-logo";
 import AgencyLogo from "../../../agency-logo";
-import GBLogo from "../../../../images/GB_Govt_Logo.png";
+import ICTLogo from "../../../../images/mohr_logo.jpg";
 import primeroLogo from "../../../../images/primero-logo.png";
 import TranslationsToggle from "../../../translations-toggle";
 import Notifier from "../../../notifier";
@@ -36,7 +36,7 @@ const Component = ({ children }) => {
             <ModuleLogo white />
           </div> */}
           <div className={css.box}>
-            <img src={GBLogo} height="200px" width="240px" alt="Logo" />
+            <img src={ICTLogo} height="200px" width="240px" alt="Logo" />
             <h2 className={css.head}>Child Protection - Information Management System</h2>
             <h3 className={css.head}>Ministry of Human Rights</h3>
           </div>
