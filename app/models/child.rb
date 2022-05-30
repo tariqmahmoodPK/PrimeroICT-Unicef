@@ -89,18 +89,15 @@ class Child < ApplicationRecord
 
   def auto_fill_comprehensive_assessment_date
     initial_assesment_completed = self.data['date_and_time_initial_assessment_was_completed_5c8fae2']
-    is_this_significant_harm_case = self.data["is_this_a__significant_harm__case_or_a_regular_case__d49a084"]
 
     return unless initial_assesment_completed.present?
 
-    if is_this_significant_harm_case.present?
-      data['if_the_child_is_in_need_of_such_services__the_comprehensive_assessment_shall_commence_immediately_and_be_completed_within_15_days_of_this_report__that_is__by_8832cc6'] = initial_assesment_completed.to_date + 3.days if self.data["is_the_case_competent_for_a_comprehensive_assessment__72cf293"].present?
-    else
-      data['if_the_child_is_in_need_of_such_services__the_comprehensive_assessment_shall_commence_immediately_and_be_completed_within_15_days_of_this_report__that_is__by_8832cc6'] = initial_assesment_completed.to_date + 10.days
-    end
+    data['if_the_child_is_in_need_of_such_services__the_comprehensive_assessment_shall_commence_immediately_and_be_completed_within_15_days_of_this_report__that_is__by_8832cc6'] = initial_assesment_completed.to_date + 30.days if self.data["is_the_case_competent_for_a_comprehensive_assessment__72cf293"].present?
   end
 
   def auto_fill_initial_assessment_due_date
+    return unless self.data['do_you_want_to_enable_auto_scheduling__9f716bf'].present?
+
     is_this_significant_harm_case = self.data["is_this_a__significant_harm__case_or_a_regular_case__d49a084"]
     registration_date = self.data["date_and_time_registration_was_completed_529de5d"]
 
@@ -109,7 +106,7 @@ class Child < ApplicationRecord
     if is_this_significant_harm_case.present?
       data["due_date_for_initial_assessment_0e82430"] = registration_date.to_date + 3.days
     else
-      data["due_date_for_initial_assessment_0e82430"] = registration_date.to_date + 10.days
+      data["due_date_for_initial_assessment_0e82430"] = registration_date.to_date + 7.days
     end
   end
 
@@ -205,7 +202,7 @@ class Child < ApplicationRecord
 
   before_validation :auto_fill_registration_date
   before_save :sync_protection_concerns, :check_for_sending_comprehensive_assessment
-  before_save :auto_populate_name, :update_with_default_value_if_nil, :add_age_from_DOB, :send_notification_for_case_response, :auto_fill_significant_harm_cases, :auto_fill_significant_harm_cases_condition2, :autofill_risk_level_filter
+  before_save :auto_populate_name, :update_with_default_value_if_nil, :add_age_from_DOB, :send_notification_for_case_response, :auto_fill_significant_harm_cases, :autofill_risk_level_filter
   before_create :hide_name, :check_for_starting_initial_assessment_on_create
   after_save :save_incidents, :check_registration_completion_date, :check_date_and_time_initial_assessment_completed, :auto_fill_reported_by, :auto_fill_alternate_care_replacement_form
   after_create :assign_child_to_dcpu
@@ -250,18 +247,16 @@ class Child < ApplicationRecord
   end
 
   def auto_fill_significant_harm_cases
-    signficant_harm_case_flag = self.data['has_the_victim_experienced__significant_harm__or_is_he_or_she_at_risk_of_more__significant_harm___without_intervention__fe0f2bc']
+    shc_flag1 = self.data['is_the_alleged_perpetrator_a_parent__guardian__or_care_giver_of_the_child__5000fdd']
+    shc_flag2 = self.data['do_the_alleged_perpetrator_and_victim_live_in_the_same_household_or_facility__or_will_the_alleged_perpetrator_have_continuing_access_to_the_victim_without_intervention_by_the_court__f6b2249']
+    shc_flag3 = self.data['has_the_victim_experienced__significant_harm__or_is_he_or_she_at_risk_of_more__significant_harm___without_intervention__fe0f2bc']
+    shc_flag4 = self.data['does_the_child_need_to_be_rescued_from_his_her_environment__29bdbf9']
 
-    return if signficant_harm_case_flag.blank?
-    self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = signficant_harm_case_flag
-  end
-
-  def auto_fill_significant_harm_cases_condition2
-    significant_harm_flag1 = self.data['is_the_alleged_perpetrator_a_parent__guardian__or_care_giver_of_the_child__5000fdd']
-    significant_harm_flag2 = self.data['do_the_alleged_perpetrator_and_victim_live_in_the_same_household_or_facility__or_will_the_alleged_perpetrator_have_continuing_access_to_the_victim_without_intervention_by_the_court__f6b2249']
-
-    return if significant_harm_flag1.blank? || significant_harm_flag2.blank?
-    self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = true
+    if shc_flag1.present? || shc_flag2.present? || shc_flag3.present? || shc_flag4.present?
+      self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = true
+    else
+      self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = false
+    end
   end
 
   def self.nested_reportable_types
@@ -1288,7 +1283,7 @@ end
 
     statuses["stats"]["Role"] = role_name
     statuses["stats"]["Number of Cases"] = Child.count
-    statuses["stats"]["data"] = { "Registered (Open)": registered_cases, "Significant Harm (Total)": harm_cases }
+    statuses["stats"]["data"] = { "Registered (Open)": registered_cases, "Emergency Cases": harm_cases }
     statuses["stats"]["data"].merge!("Pending Approval for Closure": Child.pending_cases_to_assigned(user.user_groups.first.users.pluck(:user_name)).size) if role_name.eql?("CPI In-charge")
     statuses["stats"]["data"].merge!("Closed": closed_cases) if role_name.in? ["CPI In-charge", "CPO"]
     statuses["stats"]["data"].merge!("Assigned to Me": Child.get_cases_assigned_to_specific_user(user).total) if role_name.eql?("CPO")
