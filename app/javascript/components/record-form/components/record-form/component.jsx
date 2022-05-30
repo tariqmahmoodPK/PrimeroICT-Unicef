@@ -101,9 +101,9 @@ const Component = ({
 
   const [toggleNav, setToggleNav] = useState(false);
 
-  const handleToggleNav = useCallback(() => {
+  const handleToggleNav = () => {
     setToggleNav(!toggleNav);
-  }, []);
+  };
 
   const formProps = {
     onSubmit: useCallback(
@@ -121,8 +121,8 @@ const Component = ({
         const message = () => {
           return containerMode.isEdit
             ? i18n.t(`${recordType}.messages.update_success`, {
-                record_id: record.get("short_id")
-              })
+              record_id: record.get("short_id")
+            })
             : i18n.t(`${recordType}.messages.creation_success`, recordType);
         };
 
