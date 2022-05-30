@@ -13,7 +13,6 @@ module Api::V2::Concerns::Record
     before_action :permit_fields
     before_action :select_fields_for_index, only: [:index]
     before_action :select_fields_for_show, only: [:show]
-    before_action :select_first_form, only: [:create]
   end
 
   def index
@@ -141,10 +140,6 @@ module Api::V2::Concerns::Record
     else
       authorize!(:update, @record)
     end
-  end
-
-  def select_first_form
-    FormSection.where("name_i18n @> ?", {en: "Basic Information"}.to_json).last.update_column("is_first_tab", true) if current_user.role.name.eql?("CPHO")
   end
 end
 # rubocop:enable Metrics/ModuleLength
