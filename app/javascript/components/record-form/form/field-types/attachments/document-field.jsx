@@ -42,21 +42,22 @@ const ranges = [
     label: "None"
   },
   {
-    value: "supervision_order",
-    label: "Supervision Order"
+    value: "Emergency_protection_order",
+    label: "Emergency Protection Order"
   },
   {
-    value: "custody_and_placement_order",
-    label: "Custody and Placement Order"
+    value: "care_and_placement_order",
+    label: "Care and Placement Order"
+  },
+  {
+    value: "child_care_plan_implementation_order",
+    label: "Child Care Plan Implementation Order"
   },
   {
     value: "seek_and_find_order",
     label: "Seek and Find Order"
   },
-  {
-    value: "interim_order",
-    label: "Interim Order"
-  }
+
 ];
 
 const DocumentField = ({
