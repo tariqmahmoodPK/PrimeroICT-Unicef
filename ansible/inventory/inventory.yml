@@ -1,9 +1,9 @@
 ---
 all:
   hosts:
-    cpims-ict.septemsystems.com:
+    cpims-ict2.septemsystems.com:
       ansible_user: 'deploy'
-      primero_host: 'cpims-ict.septemsystems.com'
+      primero_host: 'cpims-ict2.septemsystems.com'
       primero_tag: 'latest'
       locale_all: 'en,fr,ar'
       #always_pull: true,
