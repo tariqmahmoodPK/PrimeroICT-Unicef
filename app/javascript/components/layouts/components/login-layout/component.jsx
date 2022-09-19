@@ -5,7 +5,7 @@ import clsx from "clsx";
 
 import ModuleLogo from "../../../module-logo";
 import AgencyLogo from "../../../agency-logo";
-import ICTLogo from "../../../../images/mohr_logo.jpg";
+import ICTLogo from "../../../../images/mohr_logo.png";
 import primeroLogo from "../../../../images/primero-logo.png";
 import TranslationsToggle from "../../../translations-toggle";
 import Notifier from "../../../notifier";
