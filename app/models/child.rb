@@ -566,9 +566,25 @@ end
     total_case_count = Child.get_childs(user, "significant", "registered").count
     Child.get_childs(user, "significant").each do |child|
       stats.each do |key, value|
-        next unless key.to_s.in? child.protection_concerns
+        if child.data["physical_violence_2a5e2a5"].present? && child.data["physical_violence_2a5e2a5"] != "not_applicable_764761"
+          stats[:arrested_detained][:cases] += 1
+        end
 
-        stats[key][:cases] += 1
+        if child.data["emotional___mental_violence_f6a8137"].present? && child.data["emotional___mental_violence_f6a8137"] != "not_applicable_505345"
+          stats[:statelessness][:cases] += 1
+        end
+
+        if child.data["neglect_or_negligent_treatment_410a335"].present? && child.data["neglect_or_negligent_treatment_410a335"] != "not_applicable_255791"
+          stats[:trafficked_smuggled][:cases] += 1
+        end
+
+        if child.data["child_labour_exploitation_d7de60f"].present? && child.data["child_labour_exploitation_d7de60f"] != "not_applicable_786294"
+          stats[:gbv_survivor][:cases] += 1
+        end
+
+        if child.data["sexual_abuse_and_exploitation_af908b5"].present? && child.data["sexual_abuse_and_exploitation_af908b5"] != "not_applicable_56080"
+          stats[:sexually_exploited][:cases] += 1
+        end
       end
     end.count
 
