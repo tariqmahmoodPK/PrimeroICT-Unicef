@@ -628,7 +628,7 @@ end
   def self.get_cases_with_district_and_agency(user, significant_harm = nil)
     usernames = user.agency.users.pluck(:user_name)
     cases = Child.search do
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
@@ -636,7 +636,7 @@ end
     end
 
     search = Child.search do
-       with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+       with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
@@ -651,7 +651,7 @@ end
     usernames = user.agency.users.pluck(:user_name)
     cases = Child.search do
       with(:status, "closed")
-       with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+       with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
@@ -664,7 +664,7 @@ end
 
     search = Child.search do
       with(:status, "closed")
-       with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+       with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
@@ -683,7 +683,7 @@ end
     usernames = user.agency.users.pluck(:user_name)
     cases = Child.search do
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
@@ -692,7 +692,7 @@ end
 
     search = Child.search do
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
@@ -708,7 +708,7 @@ end
     province = with_province(user)
     search = Child.search do
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, province)
@@ -727,7 +727,7 @@ end
     province = with_province(user)
     cases = Child.search do
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, province)
@@ -736,7 +736,7 @@ end
 
     search = Child.search do
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:owned_by, usernames)
         with(:owned_by_location, province)
@@ -1235,13 +1235,13 @@ end
   def self.get_cases_assigned_to_specific_user(user, significant_harm = nil, registered = nil)
     cases = Child.search do
       with(:owned_by, user.user_name)
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       without(:date_and_time_registration_was_completed_529de5d, nil) if registered.present?
     end
 
     search = Child.search do
       with(:owned_by, user.user_name)
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       without(:date_and_time_registration_was_completed_529de5d, nil) if registered.present?
       paginate :page => 1, :per_page => cases.total
     end
@@ -1251,7 +1251,7 @@ end
 
   def self.get_significant_harm_cases
     search = Child.search do
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true)
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476')
     end
 
     search
@@ -1260,7 +1260,7 @@ end
   def self.get_significant_harm_cases_with_user(username)
     search = Child.search do
       with(:owned_by, username)
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true)
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476')
     end
 
     search
@@ -1269,7 +1269,7 @@ end
   def self.get_significant_harm_cases_with_user_group(user_groups)
     search = Child.search do
       with(:owned_by_groups, user_groups)
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true)
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476')
     end
 
     search
@@ -1410,7 +1410,7 @@ end
     cases = Child.search do
       with(:owned_by, username)
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:case_goals_all_met_601e9c9, true)
         with(:case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44, true)
@@ -1420,7 +1420,7 @@ end
     search = Child.search do
       with(:owned_by, username)
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:case_goals_all_met_601e9c9, true)
         with(:case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44, true)
@@ -1435,13 +1435,13 @@ end
     cases = Child.search do
       with(:owned_by, username)
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
     end
 
     search = Child.search do
       with(:owned_by, username)
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       paginate :page => 1, :per_page => cases.total
     end
 
@@ -1845,12 +1845,12 @@ end
     usernames = user_groups.first.users.pluck(:user_name)
     cases = Child.search do
       with(:owned_by, usernames)
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
     end
 
     search = Child.search do
       with(:owned_by, usernames)
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       paginate :page => 1, :per_page => cases.total
     end
 
@@ -1862,7 +1862,7 @@ end
     search = Child.search do
       with(:owned_by, usernames)
       with(:status, "closed")
-      with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+      with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       any_of do
         with(:case_goals_all_met_601e9c9, true)
         with(:case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44, true)
@@ -1877,13 +1877,13 @@ end
     cases = Child.search do
       with(:owned_by, usernames)
       with(:status, "closed")
-       with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+       with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
     end
 
     search = Child.search do
       with(:owned_by, usernames)
       with(:status, "closed")
-       with(:is_this_a__significant_harm__case_or_a_regular_case__d49a084, true) if significant_harm.present?
+       with(:is_this_a_significant_harm_case__b343242, 'yes_174476') if significant_harm.present?
       paginate :page => 1, :per_page => cases.total
     end
 
