@@ -1610,15 +1610,60 @@ end
 
     alternate_cases = role_name.eql?("CPO") ? check_for_alternate_care_placement_with_user(user.user_name) : with_department(user.agency.unique_id).check_for_alternate_care_placement
     alternate_cases.each do |child|
-      gender = child.data["child_s_sex_2fe5059"]
+      @gender = child.data["child_s_sex_2fe5059"]
+      if child.data["physical_violence_2a5e2a5"].present? && child.data["physical_violence_2a5e2a5"] != "not_applicable_764761"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
 
-      case gender
-      when "male"
-        stats[:male] += 1
-      when "female"
-        stats[:female] += 1
-      else
-        stats[:transgender] += 1
+      if child.data["emotional___mental_violence_f6a8137"].present? && child.data["emotional___mental_violence_f6a8137"] != "not_applicable_505345"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
+
+      if child.data["neglect_or_negligent_treatment_410a335"].present? && child.data["neglect_or_negligent_treatment_410a335"] != "not_applicable_255791"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
+
+      if child.data["child_labour_exploitation_d7de60f"].present? && child.data["child_labour_exploitation_d7de60f"] != "not_applicable_786294"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
+
+      if child.data["sexual_abuse_and_exploitation_af908b5"].present? && child.data["sexual_abuse_and_exploitation_af908b5"] != "not_applicable_56080"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
       end
     end
 
