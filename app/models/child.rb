@@ -1015,8 +1015,25 @@ end
       end
 
       cases["#{child.data["child_s_age_f2599ad"]}"].each do |key, value|
-        next unless key.to_s.in? child.protection_concerns
-        cases["#{child.data["child_s_age_f2599ad"]}"][key] += 1
+        if child.data["physical_violence_2a5e2a5"].present? && child.data["physical_violence_2a5e2a5"] != "not_applicable_764761"
+          cases["#{child.data["child_s_age_f2599ad"]}"][:arrested_detained] += 1
+        end
+
+        if child.data["emotional___mental_violence_f6a8137"].present? && child.data["emotional___mental_violence_f6a8137"] != "not_applicable_505345"
+          cases["#{child.data["child_s_age_f2599ad"]}"][:statelessness] += 1
+        end
+
+        if child.data["neglect_or_negligent_treatment_410a335"].present? && child.data["neglect_or_negligent_treatment_410a335"] != "not_applicable_255791"
+          cases["#{child.data["child_s_age_f2599ad"]}"][:trafficked_smuggled] += 1
+        end
+
+        if child.data["child_labour_exploitation_d7de60f"].present? && child.data["child_labour_exploitation_d7de60f"] != "not_applicable_786294"
+          cases["#{child.data["child_s_age_f2599ad"]}"][:gbv_survivor] += 1
+        end
+
+        if child.data["sexual_abuse_and_exploitation_af908b5"].present? && child.data["sexual_abuse_and_exploitation_af908b5"] != "not_applicable_56080"
+          cases["#{child.data["child_s_age_f2599ad"]}"][:sexually_exploited] += 1
+        end
       end
     end
 
