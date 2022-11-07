@@ -812,19 +812,64 @@ end
     }
 
     get_resolved_cases_for_role(user).each do |child|
-      result["stats"].each do |key, value|
-        next unless key.to_s.in? child.protection_concerns
-
-        gender = child.data["child_s_sex_2fe5059"]
+      result["stats"].each do |key, valueresolved_cases_by_g|
+        child_sex = child.data["child_s_sex_2fe5059"]
+        gender = child_sex
         next unless gender
 
-        case gender
-        when "male"
-          result["stats"][key][:male] += 1
-        when "female"
-          result["stats"][key][:female] += 1
-        else
-          result["stats"][key][:transgender] += 1
+        if child.data["physical_violence_2a5e2a5"].present? && child.data["physical_violence_2a5e2a5"] != "not_applicable_764761"
+          case gender
+          when "male"
+            result["stats"][key][:male] += 1
+          when "female"
+            result["stats"][key][:female] += 1
+          else
+            result["stats"][key][:transgender] += 1
+          end
+        end
+
+        if child.data["emotional___mental_violence_f6a8137"].present? && child.data["emotional___mental_violence_f6a8137"] != "not_applicable_505345"
+          case gender
+          when "male"
+            result["stats"][key][:male] += 1
+          when "female"
+            result["stats"][key][:female] += 1
+          else
+            result["stats"][key][:transgender] += 1
+          end
+        end
+
+        if child.data["neglect_or_negligent_treatment_410a335"].present? && child.data["neglect_or_negligent_treatment_410a335"] != "not_applicable_255791"
+          case gender
+          when "male"
+            result["stats"][key][:male] += 1
+          when "female"
+            result["stats"][key][:female] += 1
+          else
+            result["stats"][key][:transgender] += 1
+          end
+        end
+
+        if child.data["child_labour_exploitation_d7de60f"].present? && child.data["child_labour_exploitation_d7de60f"] != "not_applicable_786294"
+          case gender
+          when "male"
+            result["stats"][key][:male] += 1
+          when "female"
+            result["stats"][key][:female] += 1
+          else
+            result["stats"][key][:transgender] += 1
+          end
+        end
+
+        if child.data["sexual_abuse_and_exploitation_af908b5"].present? && child.data["sexual_abuse_and_exploitation_af908b5"] != "not_applicable_56080"
+          case gender
+          when "male"
+            result["stats"][key][:male] += 1
+          when "female"
+            result["stats"][key][:female] += 1
+          else
+            result["stats"][key][:transgender] += 1
+          end
         end
       end
     end
