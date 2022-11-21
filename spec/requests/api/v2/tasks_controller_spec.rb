@@ -64,7 +64,7 @@ describe Api::V2::TasksController, type: :request do
         end
       end
 
-      describe 'Case Plan task' do
+      describe 'Child Care Plan task' do
         before do
           @task = json['data'].select { |x| x['type'] == 'case_plan' }.first
         end

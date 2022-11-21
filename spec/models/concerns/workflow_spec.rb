@@ -147,13 +147,13 @@ describe Workflow do
         end
       end
 
-      context 'and date case plan initiated is set' do
+      context 'and date child care plan initiated is set' do
         before do
           @case1.date_case_plan = Date.current
           @case1.save
         end
 
-        it 'workflow status should be CASE PLAN' do
+        it 'workflow status should be CHILD CARE PLAN' do
           expect(@case1.workflow).to eq(Workflow::WORKFLOW_CASE_PLAN)
         end
       end

@@ -143,12 +143,12 @@ describe FieldI18nService do
       field = {
         'ar' => {
           'closure' => 'Closure-AR',
-          'case_plan'=>'Case Plan-AR',
+          'case_plan'=>'Child Care Plan-AR',
           'assessment'=>'SER-AR'
           },
         'en' => {
           'closure' => 'Closure',
-          'case_plan' => 'Case Plan',
+          'case_plan' => 'Child Care Plan',
           'assessment' => 'SER'
         }
       }
@@ -159,9 +159,9 @@ describe FieldI18nService do
           "ar"=>"SER-AR",
         },
         "case_plan"=>{
-          "en"=>"Case Plan",
+          "en"=>"Child Care Plan",
           "fr"=>"",
-          "ar"=>"Case Plan-AR"
+          "ar"=>"Child Care Plan-AR"
         },
         "closure"=>{
           "en"=>"Closure",

@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/styles";
 import { ROUTES, PERMITTED_URL, APPLICATION_NAV } from "../../config";
 import AgencyLogo from "../agency-logo";
 import ModuleLogo from "../module-logo";
-import GBLogo from "../../images/GB_Govt_Logo.png";
+import ICTLogo from "../../images/mohr_logo.png"
 import { useMemoizedSelector } from "../../libs";
 import MobileToolbar from "../mobile-toolbar";
 import { useApp } from "../application";
@@ -98,10 +98,10 @@ const Nav = () => {
       <Hidden smDown implementation="css">
         {/* <ModuleLogo username={username} /> */}
         <div className={css.box}>
-          <img src={GBLogo} height="80px" width="100px" alt="Logo" />
-          <p className={css.head}>Child Protection</p>
-          <p className={css.head}>Information Management System</p>
-          <p className={css.head}>Government of Gilgit-Baltistan</p>
+          <img src={ICTLogo} height="80px" width="80px" alt="Logo" />
+          <p className={css.head}>CP-IMS</p>
+          <p className={css.head}>Ministry of Human Rights</p>
+          <p className={css.head}>Islamabad Capital Territory</p>
         </div>
       </Hidden>
       <div className={css.drawerHeaderContainer}>

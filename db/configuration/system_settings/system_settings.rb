@@ -59,14 +59,14 @@ create_or_update_system_setting(
   duplicate_export_field: "national_id_no",
   approvals_labels_en: {
     assessment: 'Assessment',
-    case_plan: 'Case Plan',
+    case_plan: 'Child Care Plan',
     closure: 'Closure',
     action_plan: 'Action Plan',
     gbv_closure: 'GBV Closure'
   },
   approvals_labels_ar: {
     assessment: 'Assessment',
-    case_plan: 'Case Plan',
+    case_plan: 'Child Care Plan',
     closure: 'Closure',
     action_plan: 'Action Plan',
     gbv_closure: 'GBV Closure'

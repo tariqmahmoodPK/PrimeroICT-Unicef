@@ -28,7 +28,7 @@ fields = [
         }),
   Field.new({"name" => "has_case_plan",
         "type" => "tick_box",
-        "display_name_en" => "Does this case have a case plan?",
+        "display_name_en" => "Does this case have a child care plan?",
         "editable" => false,
         "disabled" => true
         }),

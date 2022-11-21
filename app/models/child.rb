@@ -89,18 +89,15 @@ class Child < ApplicationRecord
 
   def auto_fill_comprehensive_assessment_date
     initial_assesment_completed = self.data['date_and_time_initial_assessment_was_completed_5c8fae2']
-    is_this_significant_harm_case = self.data["is_this_a__significant_harm__case_or_a_regular_case__d49a084"]
 
     return unless initial_assesment_completed.present?
 
-    if is_this_significant_harm_case.present?
-      data['if_the_child_is_in_need_of_such_services__the_comprehensive_assessment_shall_commence_immediately_and_be_completed_within_15_days_of_this_report__that_is__by_8832cc6'] = initial_assesment_completed.to_date + 3.days if self.data["is_the_case_competent_for_a_comprehensive_assessment__72cf293"].present?
-    else
-      data['if_the_child_is_in_need_of_such_services__the_comprehensive_assessment_shall_commence_immediately_and_be_completed_within_15_days_of_this_report__that_is__by_8832cc6'] = initial_assesment_completed.to_date + 10.days
-    end
+    data['if_the_child_is_in_need_of_such_services__the_comprehensive_assessment_shall_commence_immediately_and_be_completed_within_15_days_of_this_report__that_is__by_8832cc6'] = initial_assesment_completed.to_date + 30.days if self.data["is_the_case_competent_for_a_comprehensive_assessment__72cf293"].present?
   end
 
   def auto_fill_initial_assessment_due_date
+    return unless self.data['do_you_want_to_enable_auto_scheduling__9f716bf'].present?
+
     is_this_significant_harm_case = self.data["is_this_a__significant_harm__case_or_a_regular_case__d49a084"]
     registration_date = self.data["date_and_time_registration_was_completed_529de5d"]
 
@@ -109,7 +106,7 @@ class Child < ApplicationRecord
     if is_this_significant_harm_case.present?
       data["due_date_for_initial_assessment_0e82430"] = registration_date.to_date + 3.days
     else
-      data["due_date_for_initial_assessment_0e82430"] = registration_date.to_date + 10.days
+      data["due_date_for_initial_assessment_0e82430"] = registration_date.to_date + 7.days
     end
   end
 
@@ -205,7 +202,7 @@ class Child < ApplicationRecord
 
   before_validation :auto_fill_registration_date
   before_save :sync_protection_concerns, :check_for_sending_comprehensive_assessment
-  before_save :auto_populate_name, :update_with_default_value_if_nil, :add_age_from_DOB, :send_notification_for_case_response, :auto_fill_significant_harm_cases, :auto_fill_significant_harm_cases_condition2, :autofill_risk_level_filter
+  before_save :auto_populate_name, :update_with_default_value_if_nil, :add_age_from_DOB, :send_notification_for_case_response, :auto_fill_significant_harm_cases, :autofill_risk_level_filter
   before_create :hide_name, :check_for_starting_initial_assessment_on_create
   after_save :save_incidents, :check_registration_completion_date, :check_date_and_time_initial_assessment_completed, :auto_fill_reported_by, :auto_fill_alternate_care_replacement_form
   after_create :assign_child_to_dcpu
@@ -250,18 +247,16 @@ class Child < ApplicationRecord
   end
 
   def auto_fill_significant_harm_cases
-    signficant_harm_case_flag = self.data['has_the_victim_experienced__significant_harm__or_is_he_or_she_at_risk_of_more__significant_harm___without_intervention__fe0f2bc']
+    shc_flag1 = self.data['is_the_alleged_perpetrator_a_parent__guardian__or_care_giver_of_the_child__5000fdd']
+    shc_flag2 = self.data['do_the_alleged_perpetrator_and_victim_live_in_the_same_household_or_facility__or_will_the_alleged_perpetrator_have_continuing_access_to_the_victim_without_intervention_by_the_court__f6b2249']
+    shc_flag3 = self.data['has_the_victim_experienced__significant_harm__or_is_he_or_she_at_risk_of_more__significant_harm___without_intervention__fe0f2bc']
+    shc_flag4 = self.data['does_the_child_need_to_be_rescued_from_his_her_environment__29bdbf9']
 
-    return if signficant_harm_case_flag.blank?
-    self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = signficant_harm_case_flag
-  end
-
-  def auto_fill_significant_harm_cases_condition2
-    significant_harm_flag1 = self.data['is_the_alleged_perpetrator_a_parent__guardian__or_care_giver_of_the_child__5000fdd']
-    significant_harm_flag2 = self.data['do_the_alleged_perpetrator_and_victim_live_in_the_same_household_or_facility__or_will_the_alleged_perpetrator_have_continuing_access_to_the_victim_without_intervention_by_the_court__f6b2249']
-
-    return if significant_harm_flag1.blank? || significant_harm_flag2.blank?
-    self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = true
+    if shc_flag1.present? || shc_flag2.present? || shc_flag3.present? || shc_flag4.present?
+      self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = true
+    else
+      self.data['is_this_a__significant_harm__case_or_a_regular_case__d49a084'] = false
+    end
   end
 
   def self.nested_reportable_types
@@ -455,7 +450,7 @@ class Child < ApplicationRecord
     date = get_hash_keys_values("case_plan_due_date")
     return unless date.present? && (date <= registration_date)
 
-    errors.add :base, :invalid, message: "Case plan due date should come after the registration date."
+    errors.add :base, :invalid, message: "Child Care plan due date should come after the registration date."
   end
 
   def validate_closure_date
@@ -558,7 +553,7 @@ end
 
   def self.protection_concern_stats(user)
     name = user.role.name
-    return { permission: false } unless name.in? ['CPO', 'Referral', 'DCPU Admin', 'CP Manager']
+    return { permission: false } unless name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager']
 
     stats = {
       gbv_survivor: { cases: 0, percentage: 0 },
@@ -609,7 +604,7 @@ end
     case user.role.name
     when "CP Manager"
       with_province(user)
-    when "DCPU Admin"
+    when "CPI In-charge"
       get_cases_for_particular_user_group(user.user_groups, significant_harm)
     when "CPO"
       get_cases_assigned_to_specific_user(user, significant_harm, registered).results
@@ -622,7 +617,7 @@ end
     case user.role.name
     when "CP Manager"
       get_resolved_cases_by_province_and_agency(user, significant_harm)
-    when "DCPU Admin"
+    when "CPI In-charge"
       get_resolved_cases_for_particular_user_group(user.user_groups, significant_harm).results
     when "CPO"
       get_resolved_cases_with_user(user.user_name, significant_harm).results
@@ -635,7 +630,7 @@ end
     case user.role.name
     when "CP Manager"
       get_closed_cases_by_province_and_agency(user, significant_harm)
-    when "DCPU Admin"
+    when "CPI In-charge"
       get_closed_cases_for_particular_user_group(user.user_groups, significant_harm).results
     when "CPO"
       get_closed_cases_by_user(user.user_name, significant_harm).results
@@ -803,7 +798,7 @@ end
   end
 
   def self.resolved_cases_by_gender_and_types_of_violence(user)
-    return { permission: false } unless user.role.name.in? ['DCPU Admin', 'CPO', 'CP Manager']
+    return { permission: false } unless user.role.name.in? ['CPI In-charge', 'CPO', 'CP Manager']
 
     result = {}
     result["stats"] =  {
@@ -888,7 +883,7 @@ end
 
   def self.month_wise_registered_and_resolved_cases(user)
     name = user.role.name
-    return { permission: false } unless name.in? ['CPO', 'Referral', 'DCPU Admin', 'CP Manager']
+    return { permission: false } unless name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager']
 
     stats = {
       "Resolved" => hash_return_for_month_wise_api,
@@ -940,7 +935,7 @@ end
   end
 
   def self.demographic_analysis(user)
-    return { permission: false } unless user.role.name.in? ['CPO', 'Referral', 'DCPU Admin', 'CP Manager']
+    return { permission: false } unless user.role.name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager']
 
     total_cases = Child.count
     stats = {
@@ -948,7 +943,7 @@ end
       "No. of Children with Disabilities (CWB)" => 0,
       "No. of BISP Beneficiaries" => 0
     }
-    demographic_cases = user.role.name == "DCPU Admin" ? get_demographic_child_cases_for_user_group(user.user_groups.first.users.pluck(:user_name)) : demographic_childs
+    demographic_cases = user.role.name == "CPI In-charge" ? get_demographic_child_cases_for_user_group(user.user_groups.first.users.pluck(:user_name)) : demographic_childs
 
     demographic_cases.results.each do |child|
       stats["No. of Minority Cases"] += 1 if child.data["is_child_an_ethnic_minority__5d99703"] || child.data["is_child_a_religious_minority__48d6e93"]
@@ -961,7 +956,7 @@ end
   end
 
   def self.resolved_cases_by_age_and_violence(user)
-    return { permission: false } unless ['CP Manager', 'DCPU Admin', 'CPO', 'Referral'].include?(user.role.name)
+    return { permission: false } unless ['CP Manager', 'CPI In-charge', 'CPO', 'Referral'].include?(user.role.name)
     cases = {}
 
     get_closed_cases_for_role(user).each do |child|
@@ -1102,7 +1097,7 @@ end
 
   def self.significant_harm_cases_registered_by_age_and_gender(user)
     name = user.role.name
-    return { permission: false } unless name.in? ['CPO', 'DCPU Admin']
+    return { permission: false } unless name.in? ['CPO', 'CPI In-charge']
 
     stats = {
       gbv_survivor: { cases: 0},
@@ -1113,7 +1108,6 @@ end
     }
 
     Child.get_childs(user, "significant").each do |child|
-
       if child.data["physical_violence_2a5e2a5"].present? && child.data["physical_violence_2a5e2a5"] != "not_applicable_445274"
         stats[:gbv_survivor][:cases] += 1
       end
@@ -1142,7 +1136,7 @@ end
     case_location = self.data["district_2647797"]
     return if case_location.blank?
     location_code = Location.find_by("cast(hierarchy_path as text) LIKE ? AND type = 'district'", "%#{Location.find_by(location_code: case_location).hierarchy_path.split('.').second}%").location_code
-    dcpu_admin = User.includes(:role).find_by(agency_id: created_by.agency_id, location: location_code, roles: {name: 'DCPU Admin'})
+    dcpu_admin = User.includes(:role).find_by(agency_id: created_by.agency_id, location: location_code, roles: {name: 'CPI In-charge'})
     return if dcpu_admin.blank?
 
     Assign.create!(
@@ -1310,13 +1304,13 @@ end
 
   def self.get_child_statuses(user)
     role_name = user.role.name
-    return { permission: false } unless ['DCPU Admin', 'CPO', 'CP Manager', 'Referral'].include?(role_name)
+    return { permission: false } unless ['CPI In-charge', 'CPO', 'CP Manager', 'Referral'].include?(role_name)
 
     case role_name
     when "CPO"
       registered_cases = Child.get_registered_cases_with_user(user.user_name).total
       harm_cases = Child.get_significant_harm_cases_with_user(user.user_name).total
-    when "DCPU Admin"
+    when "CPI In-charge"
       registered_cases = get_registered_cases_with_user_group(user.user_groups.pluck(:unique_id)).total
       harm_cases = Child.get_significant_harm_cases_with_user_group(user.user_groups.pluck(:unique_id)).total
     else
@@ -1324,7 +1318,7 @@ end
       harm_cases = Child.get_significant_harm_cases.total
     end
 
-    if role_name.in? ["DCPU Admin", "CPO"]
+    if role_name.in? ["CPI In-charge", "CPO"]
       resolved_cases = role_name.eql?("CPO") ? Child.get_resolved_cases_with_user(user.user_name).total : Child.get_resolved_cases_with_user(user.user_groups.first.users.pluck(:user_name)).total
       closed_cases = role_name.eql?("CPO") ? Child.get_closed_cases_with_user(user.user_name).total : Child.get_closed_cases_with_user(user.user_groups.first.users.pluck(:user_name)).total
     end
@@ -1332,9 +1326,9 @@ end
 
     statuses["stats"]["Role"] = role_name
     statuses["stats"]["Number of Cases"] = Child.count
-    statuses["stats"]["data"] = { "Registered (Open)": registered_cases, "Significant Harm (Total)": harm_cases }
-    statuses["stats"]["data"].merge!("Pending Approval for Closure": Child.pending_cases_to_assigned(user.user_groups.first.users.pluck(:user_name)).size) if role_name.eql?("DCPU Admin")
-    statuses["stats"]["data"].merge!("Closed": closed_cases) if role_name.in? ["DCPU Admin", "CPO"]
+    statuses["stats"]["data"] = { "Registered (Open)": registered_cases, "Emergency Cases": harm_cases }
+    statuses["stats"]["data"].merge!("Pending Approval for Closure": Child.pending_cases_to_assigned(user.user_groups.first.users.pluck(:user_name)).size) if role_name.eql?("CPI In-charge")
+    statuses["stats"]["data"].merge!("Closed": closed_cases) if role_name.in? ["CPI In-charge", "CPO"]
     statuses["stats"]["data"].merge!("Assigned to Me": Child.get_cases_assigned_to_specific_user(user).total) if role_name.eql?("CPO")
 
     statuses
@@ -1359,34 +1353,34 @@ end
 
   def self.get_cases_with_supervision_order(user)
     role = user.role.name
-    return { permission: false } unless ['DCPU Admin', 'CPO'].include?(role)
+    return { permission: false } unless ['CPI In-charge', 'CPO'].include?(role)
 
-    return cases = { "cases_with_supervision_order" => Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "supervision_order").size } if role.eql?("DCPU Admin")
+    return cases = { "cases_with_supervision_order" => Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "supervision_order").size } if role.eql?("CPI In-charge")
 
     cases = { "cases_with_supervision_order" => Child.attachment_with_specific_type_and_user(user.user_name, "supervision_order").size }
   end
 
   def self.get_cases_with_custody_order(user)
     role = user.role.name
-    return { permission: false } unless ['DCPU Admin', 'CPO'].include?(role)
+    return { permission: false } unless ['CPI In-charge', 'CPO'].include?(role)
 
-    return cases = { "cases_with_custody_order" => Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "custody_and_placement_order").size } if role.eql?("DCPU Admin")
+    return cases = { "cases_with_custody_order" => Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "custody_and_placement_order").size } if role.eql?("CPI In-charge")
 
     cases = { "cases_with_custody_order" => Child.attachment_with_specific_type_and_user(user.user_name, "custody_and_placement_order").size }
   end
 
   def self.get_cases_with_court_orders(user)
     role = user.role.name
-    return { permission: false } unless ['DCPU Admin', 'CPO', 'CP Manager'].include?(role)
+    return { permission: false } unless ['CPI In-charge', 'CPO', 'CP Manager'].include?(role)
 
     cases = {
       "supervision_order" => 0, "permanent_custody_placement_order" => 0, "interim_custody_placement_order" => 0, "seek_and_find_order" => 0
     }
 
-    cases["supervision_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "supervision_order").size if role.eql?("DCPU Admin")
-    cases["permanent_custody_placement_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "permanent_custody_placement_order").size if role.eql?("DCPU Admin")
-    cases["interim_custody_placement_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "interim_custody_placement_order").size if role.eql?("DCPU Admin")
-    cases["seek_and_find_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "seek_and_find_order").size if role.eql?("DCPU Admin")
+    cases["supervision_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "supervision_order").size if role.eql?("CPI In-charge")
+    cases["permanent_custody_placement_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "permanent_custody_placement_order").size if role.eql?("CPI In-charge")
+    cases["interim_custody_placement_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "interim_custody_placement_order").size if role.eql?("CPI In-charge")
+    cases["seek_and_find_order"] = Child.attachment_with_specific_type(user.user_groups.first.users.pluck(:user_name), "seek_and_find_order").size if role.eql?("CPI In-charge")
 
     cases["supervision_order"] = Child.attachment_with_specific_type_and_user(user.user_name, "supervision_order").size if role.eql?("CPO")
     cases["permanent_custody_placement_order"] = Child.attachment_with_specific_type_and_user(user.user_name, "permanent_custody_placement_order").size if role.eql?("CPO")
@@ -1414,7 +1408,7 @@ end
     return if self.data["owned_by_agency_id"].blank?
 
     cpo = Agency.find_by_unique_id(self.data["owned_by_agency_id"]).users.includes(:role).find_by(role: { name:"CPO" })
-    dcpu = Agency.find_by_unique_id(self.data["owned_by_agency_id"]).users.includes(:role).find_by(role: { name:"DCPU Admin" })
+    dcpu = Agency.find_by_unique_id(self.data["owned_by_agency_id"]).users.includes(:role).find_by(role: { name:"CPI In-charge" })
     return if cpo.blank? && dcpu.blank?
     
     new_data = self.data.merge(name_of_cpo_fc3e1d1: cpo.user_name) if cpo.present?
@@ -1588,7 +1582,7 @@ end
 
   def self.alternative_care_placement_by_gender(user)
     role_name = user.role.name
-    return { permission: false } unless role_name.in? ['CPO', 'DCPU Admin']
+    return { permission: false } unless role_name.in? ['CPO', 'CPI In-charge']
 
     stats = {
       male: 0,
@@ -1598,15 +1592,60 @@ end
 
     alternate_cases = role_name.eql?("CPO") ? check_for_alternate_care_placement_with_user(user.user_name) : with_department(user.agency.unique_id).check_for_alternate_care_placement
     alternate_cases.each do |child|
-      gender = child.data["child_s_sex_2fe5059"]
+      @gender = child.data["child_s_sex_2fe5059"]
+      if child.data["physical_violence_2a5e2a5"].present? && child.data["physical_violence_2a5e2a5"] != "not_applicable_764761"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
 
-      case gender
-      when "male"
-        stats[:male] += 1
-      when "female"
-        stats[:female] += 1
-      else
-        stats[:transgender] += 1
+      if child.data["emotional___mental_violence_f6a8137"].present? && child.data["emotional___mental_violence_f6a8137"] != "not_applicable_505345"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
+
+      if child.data["neglect_or_negligent_treatment_410a335"].present? && child.data["neglect_or_negligent_treatment_410a335"] != "not_applicable_255791"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
+
+      if child.data["child_labour_exploitation_d7de60f"].present? && child.data["child_labour_exploitation_d7de60f"] != "not_applicable_786294"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
+      end
+
+      if child.data["sexual_abuse_and_exploitation_af908b5"].present? && child.data["sexual_abuse_and_exploitation_af908b5"] != "not_applicable_56080"
+        case @gender
+        when "male"
+          stats[:male] += 1
+        when "female"
+          stats[:female] += 1
+        else
+          stats[:transgender] += 1
+        end
       end
     end
 
@@ -1615,7 +1654,7 @@ end
   end
 
   def self.cases_referred_to_departments(user)
-    return { permission: false } unless user.role.name.in? ['CPO', 'DCPU Admin']
+    return { permission: false } unless user.role.name.in? ['CPO', 'CPI In-charge']
 
     stats = {}
     Agency.all.each do |agency|
@@ -1811,7 +1850,7 @@ end
 
   def self.services_recieved_by_type_of_physical_violence(user)
     role_name = user.role.name
-    return { permission: false } unless role_name.in? ['CPO', 'DCPU Admin']
+    return { permission: false } unless role_name.in? ['CPO', 'CPI In-charge']
 
     cases = {
       "dataset" => [
@@ -1850,7 +1889,7 @@ end
 
   def self.transfer_rejected_cases_with_district(user)
     role_name = user.role.name
-    return { permission: false } unless role_name.in? ['CPO', 'DCPU Admin']
+    return { permission: false } unless role_name.in? ['CPO', 'CPI In-charge']
 
     rejected_transfer_cases = role_name == "CPO" ? rejected_transfer_case_with_user(user.user_name) : rejected_transfer_case_with_user_group(user.user_groups.pluck(:unique_id))
     location_hash = Location.pluck_location_placename
@@ -1925,7 +1964,7 @@ end
 
   def self.services_provided_by_police(user)
     role_name = user.role.name
-    return { "permission" => false } unless role_name.in? ['CPO', 'DCPU Admin']
+    return { "permission" => false } unless role_name.in? ['CPO', 'CPI In-charge']
 
     cases = {
       "lodging_an_fir_c09aa09" => 0,
@@ -2050,7 +2089,7 @@ end
   
   def self.get_role_wise_workflow(user)
     role_name = user.role.name
-    return { "permission" => false } unless role_name.eql?('DCPU Admin')
+    return { "permission" => false } unless role_name.eql?('CPI In-charge')
 
     location_codes = Location.where("cast(hierarchy_path as text) LIKE ?", "%#{Location.find_by(location_code: user.location).hierarchy_path.split('.').second}%").pluck(:location_code)
 

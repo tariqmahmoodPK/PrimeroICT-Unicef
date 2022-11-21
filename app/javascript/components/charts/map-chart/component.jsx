@@ -8,7 +8,7 @@ import highmaps from "highcharts/modules/map.js";
 import exporting from "highcharts/modules/exporting.js";
 import offlineExporting from "highcharts/modules/offline-exporting.js";
 import accessibility from "highcharts/modules/accessibility.js";
-import geoJsonData from "./Gilgit-Baltistan.json";
+import geoJsonData from "./map.json";
 
 import styles from "./styles.css";
 
@@ -75,7 +75,7 @@ const MapChart = ({ graphData }) => {
                     const point = this.point;
                     if (point) {
                         let str = '<div style="font-size: 16px">';
-                        str += '<b> ' + point.districts + '</b><br>';
+                        str += '<b> ' + point.location + '</b><br>';
                         str += '<div style="margin-top: 10px">';
                         str += `<div style="width: 12px;height: 12px;background-color: #ffffff;display: inline-block;margin-bottom: 0px; margin-right:5px">`;
                         str += `<div style="width: 10px;height: 10px;background: ${point.color};margin-left:1px;margin-top:1px"></div>`;
@@ -90,9 +90,9 @@ const MapChart = ({ graphData }) => {
             series: [
                 {
                     data: graphData,
-                    keys: ["districts", "value", "percentage"],
-                    joinBy: "districts",
-                    name: "Cases by District",
+                    keys: ["location", "value", "percentage"],
+                    joinBy: "location",
+                    name: "Cases by Locations",
                     states: {
                         hover: {
                             color: "rgb(106, 90, 205,0.5)",
@@ -100,7 +100,7 @@ const MapChart = ({ graphData }) => {
                     },
                     dataLabels: {
                         enabled: true,
-                        format: "{point.properties.districts}",
+                        format: "{point.properties.location}",
                     },
                 },
             ],
